@@ -9,7 +9,7 @@
         </form>
         <form action="/select_source" method="post">
         <select name="source" id="source" class="form-select mb-3">
-            <option value="Local">Local</option>
+            <option value="Local" {% if session.get("data_source") == "Local" %} selected {% endif %}>Local</option>
             <option value="XNAT" {% if session.get("data_source") == "XNAT" %} selected {% endif %}>XNAT</option>
         </select>
         <input type="submit" class="btn btn-dark mb-3" value="Select"></button>
