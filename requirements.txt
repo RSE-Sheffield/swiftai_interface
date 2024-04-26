@@ -2,4 +2,6 @@ rq==1.16.1
 redis==5.0.3
 flask==3.0.2
 flask-session==0.8.0
+gunicorn==21.2.0
+rq-dashboard==0.6.7
 polars==0.20.21
