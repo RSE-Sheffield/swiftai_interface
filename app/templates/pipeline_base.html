@@ -1,20 +1,18 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>SwiftAI pipelines</title>
-    </head>
-    <body>
-        {% block select_source %}
-        {% endblock %}
-        
-        {% block upload_files %}
-        {% endblock %}
-        
-        {% block select_scans %}
-        {% endblock %}
-        
-        {% block select_pipeline %}
-        {% endblock %}
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="container">
+    {% block select_source %}
+    {% endblock %}
+
+    {% block upload_files %}
+    {% endblock %}
+
+    {% block select_scans %}
+    {% endblock %}
+
+    {% block select_pipeline %}
+    {% endblock %}
+</div>
+{% endblock %}
 
