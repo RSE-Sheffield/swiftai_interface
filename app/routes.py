@@ -8,7 +8,6 @@ def home():
     """
     Home endpoint
     """
-
     return render_template("home.html")
 
 @app.get('/pipeline')
@@ -72,7 +71,7 @@ def upload_file():
         return 'No selected file'
 
     session['current_file'] = file.filename
-    session['scanList'] = parse_file_locs(file.stream)
+    session['scan_list'] = parse_file_locs(file.stream)
     return redirect(url_for('pipeline_get'))
 
 @app.post('/clear_file')
@@ -96,6 +95,9 @@ def select_source():
     """
 
     session['data_source'] = request.form.get("source")
+
+    session["current_file"] = None
+    session["selected_scans"] = []
 
     # If local source is selected then file upload is allowed straight away
     # Otherwise a connection to an XNAT server must be made before file upload
