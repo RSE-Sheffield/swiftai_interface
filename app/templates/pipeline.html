@@ -1,0 +1,95 @@
+{% extends "pipeline_base.html" %}
+
+{% block select_source %}
+<h2>Select data source:</h2>
+
+<form action="/select_source" method="post">
+    <select name="source" id="source">
+        <option value="Local">Local</option>
+        <option value="XNAT">XNAT</option>
+    </select>
+    <input type="submit" value="Select"></button>
+</form>
+<form action="/reset_session" method="post">
+    <input type="submit" value="Reset session">
+</form>
+
+{% if session.get("data_source") == "XNAT" %}
+
+<h3>XNAT connection details:</h3>
+<form action="/xnat_connect" method="post">
+    <label for="XNATurl">XNAT URL:</label><br>
+    <input id="XNATurl" name="XNATurl" type="url" list="defaultURLs" required /> <br>
+
+    <label for="XNATuser">XNAT Username:</label><br>
+    <input id="XNATuser" name="XNATuser" type="text" required/> <br>
+
+    <label for="XNATpass">XNAT Password:</label><br>
+    <input id="XNATpass" name="XNATpass" type="password" required/> <br>
+
+    <input type="submit" value="Select"></button>
+    
+    <datalist id="defaultURLs">
+        <option value="https://polaris-pacs-dev1.shef.ac.uk/"></option>
+    </datalist>
+</form>
+{% if session.get("XNAT_connected") %}
+Connection open to server {{ session.get("XNAT_servername") }}
+    <form action="/xnat_disconnect" method="post">
+        <input type="submit" value="Disconnect"></button>
+    </form>
+{% endif %}
+
+
+{% endif %}
+{% endblock %}
+
+
+{% block upload_files %}
+{% if session.get("upload_allowed") %}
+    <h2>Upload file:</h2>
+    Currently uploaded file: {{ session.get("current_file") }}
+    <br>
+    <h3>Select new file:</h3>
+    <form action = "/upload_file" method="post" enctype = "multipart/form-data">
+        <input type = "file" name = "file" />
+        <input type = "submit" value = "Upload"/>
+    </form>
+    <h3>Clear old file:</h3>
+    <form action = "/clear_file" method="post">
+        <input type = "submit" value = "Clear"/>
+    </form>
+{% endif %}
+{% endblock %}
+
+{% block select_scans %}
+    {% if session.get("current_file") %}
+    <h2>Select scans:</h2>
+    <form action="/select_scans" method="post">
+        <input type="checkbox" name="use_all" id="use_all" value="use_all">
+        <label for="use_all">Use all scans</label><br>
+        <label for="image-data">Choose specific scans:</label><br>
+        <select name="image-data" id="image-data" multiple>
+            {% for img in session.get("scanList") %}
+                <option value="{{img}}">{{ img }}</option>
+            {% endfor %}
+        </select><br>
+        <input type="submit" value="Select Scans">
+    </form>
+    {% endif %}
+    {% endblock %}
+    
+{% block select_pipeline %}
+    {% if session.get("selected_scans") %}
+    <h2>Select pipeline:</h2>
+    <form action="/pipeline" method="post">
+        <label for="method">Select pipeline to use:</label>
+        <select name="method" id="method">
+            {% for label in methodList %}
+            <option value="{{label}}">{{ label }}</option>
+            {% endfor %}
+        </select><br>
+        <button type="submit" name="queue_pipeline">Queue pipeline</button>
+    </form>
+    {% endif %}
+{% endblock %}
