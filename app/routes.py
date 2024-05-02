@@ -55,13 +55,14 @@ def pipeline_post():
         # TODO: If working from XNAT then need a download files and, if 
         # required, convert files job added before running the pipeline
 
-        inputFilename = os.path.basename(image)
-        outputFilename = inputFilename.replace(".nii.gz", f"_{suffix}.nii.gz")
-        file_out = os.path.join(outDir, outputFilename)
+        if os.path.exists(image):
+            inputFilename = os.path.basename(image)
+            outputFilename = inputFilename.replace(".nii.gz", f"_{suffix}.nii.gz")
+            file_out = os.path.join(outDir, outputFilename)
 
-        job = redQueue.enqueue(new_job, method, image, file_out, depends_on = None, at_front = priority)
+            job = redQueue.enqueue(new_job, method, image, file_out, depends_on = None, at_front = priority)
 
-        print(job)
+            print(job)
 
     return redirect('queue')
 
