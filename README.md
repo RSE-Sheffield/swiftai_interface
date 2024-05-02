@@ -17,10 +17,10 @@ Web/Flask based interface for the swiftai pipeline
 
 ## Run the interface
 
-`flask --app app run`
+Use `flask --app app run` for development work.  
+Optinally include `--debug` flag so code reloads after changes.  
 
-Include `--debug` flag for development work (so code reloads after changes)
-
+Use `gunicorn --bind 0.0.0.0:8000 app:app` for deployment on Port 8000 of a server  
 
 ## Run the worker
 
@@ -73,3 +73,11 @@ For the 'Download' and 'Convert' steps it would be possible to add them to the q
 #### General error signalling
 Currently there is little in the way of error messages indicating to an end user something has gone wrong. This could be improved.
 
+
+## Using docker
+
+> [!WARNING]
+> This doesn't work yet
+
+Need to make sure all files and repos are downloaded (as describe above)
+`docker compose up`

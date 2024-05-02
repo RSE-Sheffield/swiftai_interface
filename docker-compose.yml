@@ -1,0 +1,41 @@
+version: "3.8"
+services:
+    redis:
+        image: redis
+        ports:
+            - "6379:6379"
+
+    app:
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        env_file: .env
+        environment:
+            - REDIS_URL=redis://redis:6379
+            - PORT=8000
+        ports:
+            - "80:8000"
+        volumes:
+            - type: bind
+              source: "$HOST_HOME/data_in"
+              target: "/data_in"
+
+#    worker:
+#        build:
+#            context: ./
+#            dockerfile: Dockerfile
+#        command: rq worker aipipes --url redis://redis:6379
+#        volumes:
+#            - type: bind
+#              source: $DATA_IN_DIR
+#              destination: $DATA_IN_DIR
+#            - type: bind
+#              source: $DATA_OUT_DIR
+#              destination: $DATA_OUT_DIR
+#        deploy:
+#          resources:
+#            reservations:
+#              devices:
+#              - driver: nvidia
+#                count: all
+#                capabilities: [gpu]
