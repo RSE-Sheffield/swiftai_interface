@@ -24,11 +24,8 @@ Include `--debug` flag for development work (so code reloads after changes)
 
 ## Run the worker
 
-When deployed locally on a machine (i.e. not using docker), by default the jobs will be added to the queue, but will not be processed until a worker is started.
-
+By default the jobs will be added to the queue, but will not be processed until a worker is started.  
 Use the command (typically in another terminal on the same machine) `rq worker` to start the worker
-
-When using docker there will be a worker container that is automatically started when all the containers start.
 
 
 ## Status of interface
