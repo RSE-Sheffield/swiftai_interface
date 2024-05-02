@@ -2,6 +2,7 @@ from flask import render_template, request, redirect, url_for, session
 from app import app, redQueue
 from app.utils import parse_file_locs
 from app.pipelines import methodDict, new_job
+import os
 
 @app.route('/')
 def home():
@@ -33,19 +34,32 @@ def pipeline_post():
 
     imageList = session["selected_scans"]
     methodSelect = request.form.get("method")
+    outDirName = request.form.get("out_dir")
+    priority = request.form.get("priority")
+
     method = methodDict.get(methodSelect)
+    suffix = methodSelect.replace(" ", "_")
+
+    if outDirName == "":
+        outDirName = suffix
+    
+    outPath = os.path.expanduser("~/data_out")
+    outDir = os.path.join(outPath, outDirName)
+
+    os.makedirs(outDir, exist_ok = True)
 
     # Loop though all selected scans and queue them up with the selected
     # pipeline
     for image in imageList:
 
-        # TODO: This needs replacing with something more robust
-        file_out = image.replace(".nii.gz", "_segmentation.nii.gz")
-
         # TODO: If working from XNAT then need a download files and, if 
         # required, convert files job added before running the pipeline
 
-        job = redQueue.enqueue(new_job, method, image, file_out)
+        inputFilename = os.path.basename(image)
+        outputFilename = inputFilename.replace(".nii.gz", f"_{suffix}.nii.gz")
+        file_out = os.path.join(outDir, outputFilename)
+
+        job = redQueue.enqueue(new_job, method, image, file_out, depends_on = None, at_front = priority)
 
         print(job)
 
